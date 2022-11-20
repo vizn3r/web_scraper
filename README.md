@@ -46,3 +46,5 @@
         Enter 'output directory': out/ --> will create 'out' dir in directory that the executable is
         Enter 'output directory': ../out/ --> will create 'out' dir in directory before that directory the executable is
         ```
+
+- If you have any problems/questions, create New Issue
