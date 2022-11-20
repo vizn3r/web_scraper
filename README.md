@@ -1,4 +1,4 @@
-# Simple Web Scrapper
+# Simple Web Scraper
 
 ## How to use
 
@@ -9,7 +9,7 @@
 3. Enter `web url`
 4. Enter `element`
 
-    - This could be `html` element
+    - This could be `html` tag
     - This could be `class`
     - This could be `id`
     - Or everything combined
@@ -46,3 +46,5 @@
         Enter 'output directory': out/ --> will create 'out' dir in directory that the executable is
         Enter 'output directory': ../out/ --> will create 'out' dir in directory before that directory the executable is
         ```
+
+- If you have any problems/questions, create New Issue
