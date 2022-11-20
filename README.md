@@ -9,7 +9,7 @@
 3. Enter `web url`
 4. Enter `element`
 
-    - This could be `html` element
+    - This could be `html` tag
     - This could be `class`
     - This could be `id`
     - Or everything combined
