@@ -1,4 +1,4 @@
-# Simple Web Scrapper
+# Simple Web Scraper
 
 ## How to use
 
