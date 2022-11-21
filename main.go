@@ -17,6 +17,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
+// helper functions
 func Prompt(question string) (ans string) {
     fmt.Print(question)
     scanner := bufio.NewScanner(os.Stdin)
@@ -49,15 +50,20 @@ type Data struct {
 }
 
 func main() {
+    // get information
     rawUrl := Prompt("Enter 'url': ")
     elementsString := Prompt("Enter 'element/s': ")
     elements := strings.Fields(elementsString)
     outDir := Prompt("Enter 'output directory': ")
+
+    // get html of page
     res, err := http.Get(rawUrl)
     if err != nil {panic(err)}
     body, err := io.ReadAll(res.Body)
     if err != nil {panic(err)}
     html := string(body)
+
+    // make goquery document
     reader := strings.NewReader(html)
     doc, err := goquery.NewDocumentFromReader(reader)
     if err != nil {panic(err)}
@@ -71,6 +77,7 @@ func main() {
         divs = ""
     )
 
+    // edit link tag
     doc.Find("link").Each(func(i int, s *goquery.Selection) {
         rel, rex := s.Attr("rel")
         t, tyex := s.Attr("type")
@@ -97,11 +104,13 @@ func main() {
         head += out
     })
 
+    // edit style tag
     doc.Find("style").Each(func(i int, s *goquery.Selection) {
         t, _ := s.Attr("type")
         head += "<style type=\"" + t + "\">" + s.Text() + "</style>"
     })
 
+    // edit script tag
     doc.Find("script").Each(func(i int, s *goquery.Selection) {
         t, tex := s.Attr("type")
         src, srcex := s.Attr("src")
@@ -132,6 +141,7 @@ func main() {
         head += out
     })
 
+    // edit img tag
     doc.Find("img").Each(func(i int, s *goquery.Selection) {
         src, _ := s.Attr("src")
         if (!strings.HasPrefix(src, "http://") || !strings.HasPrefix(src, "https://")) && !strings.HasPrefix(src, "//") {
@@ -139,6 +149,7 @@ func main() {
         }
     })
 
+    // edit a tag
     doc.Find("a").Each(func(i int, s *goquery.Selection) {
         href, ex := s.Attr("href")
         if !strings.HasPrefix(href, "#") && !strings.HasPrefix(href, "http://") && !strings.HasPrefix(href, "https://") && ex {
@@ -146,6 +157,7 @@ func main() {
         }
     })
 
+    // look for entered elements
     for _, e := range elements {
         doc.Find(e).Each(func(i int, s *goquery.Selection) {
             class, _ := s.Attr("class")
@@ -158,6 +170,7 @@ func main() {
         })
     }
 
+    // html template for output page
     tmpl := template.Must(template.New("").Parse(`<!DOCTYPE html>
 <html lang="en">
     <head>
@@ -169,20 +182,15 @@ func main() {
     </body>
 </html>
 `))
+
+    // create file
     f, err := os.Create(outDir + title + ".html")
-    if err != nil {
-        panic(err)
-    }
-    defer func() {
-        f.Close()
-    }()
+    if err != nil {panic(err)}
+    defer func() {f.Close()}()
     tmpl.Execute(f, Data{title, head, divs})
 
-    abs, _ := filepath.Abs("./" + outDir + title + ".html")
-    path := abs
-
-    fmt.Println(path)
-
+    // open output file in browser
+    path, _ := filepath.Abs("./" + outDir + title + ".html")
     var args []string
     switch runtime.GOOS {
     case "darwin":
