@@ -4,8 +4,8 @@
 
 ### Windows
 
-1. Download the `web_scrapper.exe` file
-2. Run `web_srapper.exe`
+1. Download the `web_scraper.exe` file
+2. Run `web_scraper.exe`
 3. Enter `web url`
 4. Enter `element`
 
